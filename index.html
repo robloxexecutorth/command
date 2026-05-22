@@ -1,329 +1,1266 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RETH OFFICIAL — THE ULTIMATE 3D HUB</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-color: #000000;
-            --card-bg: rgba(5, 5, 5, 0.6);
-            --text-main: #ffffff;
-            --text-dim: #666666;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --modal-bg: rgba(10, 10, 10, 0.95);
-            --code-bg: #000000;
-            --code-text: #ffffff;
-            --discord-color: #5865F2;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สารานุกรมคอมมานด์ Bedrock</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Sarabun:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mc-green:#62B330;
+  --mc-green2:#4a9020;
+  --mc-green3:#3a7018;
+  --mc-dark:#1D1D1D;
+  --mc-dark2:#2a2a2a;
+  --mc-dark3:#3a3a3a;
+  --mc-bg:#f5f5f0;
+  --mc-white:#ffffff;
+  --mc-cream:#f0ede6;
+  --mc-brown:#5C4033;
+  --mc-brown2:#8B5E3C;
+  --mc-red:#C0392B;
+  --mc-orange:#E67E22;
+  --mc-blue:#2980B9;
+  --mc-purple:#8E44AD;
+  --mc-yellow:#F1C40F;
+  --mc-cyan:#16A085;
+  --text-dark:#1a1a1a;
+  --text-mid:#444;
+  --text-light:#777;
+  --shadow:0 4px 0 rgba(0,0,0,0.25);
+  --shadow2:0 8px 24px rgba(0,0,0,0.12);
+  --nav-h:68px;
+  --sidebar-w:260px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Sarabun',sans-serif;background:var(--mc-bg);color:var(--text-dark);overflow-x:hidden;}
 
-        [data-theme="light"] {
-            --bg-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --text-main: #000000;
-            --text-dim: #555555;
-            --border-color: #000000;
-            --modal-bg: #ffffff;
-            --code-bg: #ffffff;
-            --code-text: #000000;
-        }
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:#e8e8e3;}
+::-webkit-scrollbar-thumb{background:var(--mc-green);border-radius:0;}
+::-webkit-scrollbar-thumb:hover{background:var(--mc-green2);}
 
-        body { margin: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; transition: 0.3s; overflow-x: hidden; position: relative; }
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        
-        /* Typography */
-        .reth-title { font-size: clamp(60px, 10vw, 85px); font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1; letter-spacing: -0.05em; }
-        
-        /* Navigation & Controls */
-        .nav-controls { position: absolute; top: 25px; right: 25px; display: flex; gap: 10px; z-index: 1100; }
-        .t-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px 15px; border-radius: 10px; font-size: 9px; font-weight: 900; text-transform: uppercase; cursor: pointer; color: var(--text-dim); transition: 0.2s; backdrop-filter: blur(10px); }
-        .t-btn.active { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:var(--nav-h);
+  background:var(--mc-dark);
+  border-bottom:4px solid var(--mc-green);
+  display:flex;align-items:center;gap:12px;
+  padding:0 24px;z-index:300;
+}
+.topbar-logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;}
+.logo-block{
+  width:40px;height:40px;
+  border:3px solid #000;
+  box-shadow:3px 3px 0 #000;
+  overflow:hidden;border-radius:4px;
+  background:#4A7C3F;
+  display:grid;place-items:center;
+}
+.logo-block img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;}
+.logo-wordmark{font-family:'Press Start 2P',monospace;line-height:1.5;}
+.logo-wordmark span:first-child{display:block;font-size:8px;color:#fff;}
+.logo-wordmark span:last-child{display:block;font-size:7px;color:var(--mc-green);}
+.topbar-search{flex:1;max-width:420px;margin-left:20px;position:relative;}
+.topbar-search input{
+  width:100%;
+  background:#fff;
+  border:3px solid #555;
+  color:var(--text-dark);
+  font-family:'Sarabun',sans-serif;
+  font-size:14px;font-weight:600;
+  padding:8px 14px 8px 40px;
+  border-radius:0;outline:none;
+  transition:border-color .2s;
+  box-shadow:inset 2px 2px 0 rgba(0,0,0,.15);
+}
+.topbar-search input:focus{border-color:var(--mc-green);}
+.topbar-search .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#888;font-size:15px;}
+.topbar-nav{display:flex;align-items:center;gap:0;margin-left:auto;}
+.topbar-nav a{
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  color:#ccc;text-decoration:none;
+  padding:8px 14px;
+  border-bottom:3px solid transparent;
+  transition:all .15s;white-space:nowrap;
+}
+.topbar-nav a:hover,.topbar-nav a.tactive{color:#fff;border-bottom-color:var(--mc-green);}
+.mc-btn-buy{
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  background:var(--mc-green);color:#fff;
+  border:none;padding:10px 16px;
+  box-shadow:var(--shadow);cursor:pointer;
+  transition:background .15s,transform .1s;
+  text-decoration:none;white-space:nowrap;margin-left:12px;
+}
+.mc-btn-buy:hover{background:var(--mc-green2);transform:translateY(-1px);}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:6px;margin-left:auto;}
 
-        .discord-btn {
-            background: var(--discord-color); color: white; padding: 10px 20px; border-radius: 12px;
-            font-size: 9px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center;
-            transition: 0.3s; box-shadow: 0 0 15px rgba(88, 101, 242, 0.4); animation: discordGlow 2s infinite;
-        }
-        @keyframes discordGlow {
-            0%, 100% { box-shadow: 0 0 5px rgba(88, 101, 242, 0.4); transform: scale(1); }
-            50% { box-shadow: 0 0 20px rgba(88, 101, 242, 0.8); transform: scale(1.02); }
-        }
+.sidebar{
+  position:fixed;top:var(--nav-h);left:0;bottom:0;
+  width:var(--sidebar-w);
+  background:var(--mc-dark2);
+  border-right:3px solid #111;
+  overflow-y:auto;z-index:100;
+  transition:transform .3s;
+}
+.sidebar-logo-area{
+  padding:16px;
+  background:var(--mc-dark);
+  border-bottom:2px solid #111;
+  display:flex;align-items:center;gap:10px;
+}
+.sidebar-logo-area img{width:32px;height:32px;image-rendering:pixelated;border:2px solid #555;}
+.sidebar-logo-area span{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--mc-green);line-height:1.8;}
+.sidebar-section{
+  padding:14px 16px 6px;
+  font-family:'Sarabun',sans-serif;font-size:11px;font-weight:700;
+  color:#555;letter-spacing:.05em;text-transform:uppercase;
+  border-top:1px solid #333;margin-top:8px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 16px;margin:1px 0;
+  cursor:pointer;font-size:14px;font-weight:700;
+  color:#aaa;text-decoration:none;
+  border-left:4px solid transparent;
+  transition:all .15s;
+}
+.nav-item:hover{background:rgba(255,255,255,.05);color:#fff;border-left-color:#555;}
+.nav-item.active{background:rgba(98,179,48,.12);color:var(--mc-green);border-left-color:var(--mc-green);}
+.nav-item img{width:22px;height:22px;image-rendering:pixelated;flex-shrink:0;border:1px solid #444;}
+.nav-count{margin-left:auto;font-size:10px;background:#333;color:#888;padding:2px 7px;border-radius:0;font-family:'Press Start 2P',monospace;}
 
-        /* --- CARD ANIMATION SYSTEM (NO REMOVAL) --- */
-        .reth-card { 
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 28px; 
-            transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.5s ease;
-            overflow: hidden; position: relative; cursor: pointer; backdrop-filter: blur(12px);
-            will-change: transform; transform: translateY(0) scale(1);
-        }
-        
-        .card-pop { animation: cardEntrance 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
-        @keyframes cardEntrance { 
-            from { opacity: 0; transform: translateY(40px) scale(0.92); } 
-            to { opacity: 1; transform: translateY(0) scale(1); } 
-        }
+.main{margin-left:var(--sidebar-w);padding-top:var(--nav-h);}
 
-        .reth-card:hover { 
-            transform: translateY(-15px) scale(1.035); 
-            border-color: var(--text-main); 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            z-index: 100;
-        }
-        
-        .reth-card img { opacity: 0.6; transition: 0.5s ease; }
-        .reth-card:hover img { opacity: 1; transform: scale(1.05); }
+.hero{
+  position:relative;overflow:hidden;
+  min-height:360px;
+  background:var(--mc-green);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:60px 40px 50px;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('https://wallpapercave.com/wp/wp11812668.jpg') center 30%/cover no-repeat;
+  opacity:.22;image-rendering:pixelated;
+}
+.hero-pattern{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(98,179,48,.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(98,179,48,.35) 1px, transparent 1px);
+  background-size:32px 32px;opacity:.4;
+}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.5) 100%);}
+.hero-content{position:relative;z-index:2;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;
+  padding:8px 18px;margin-bottom:20px;
+  background:rgba(0,0,0,.5);color:var(--mc-green);
+  border:2px solid var(--mc-green);
+  box-shadow:3px 3px 0 rgba(0,0,0,.4);
+}
+.hero-title{
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(18px,3.2vw,38px);
+  color:#fff;
+  text-shadow:4px 4px 0 rgba(0,0,0,.6),-2px -2px 0 rgba(0,0,0,.3);
+  line-height:1.6;margin-bottom:14px;letter-spacing:1px;
+}
+.hero-sub{font-size:17px;font-weight:600;color:rgba(255,255,255,.85);max-width:580px;line-height:1.8;margin:0 auto 24px;}
+.hero-cta-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.hero-cta{
+  font-family:'Sarabun',sans-serif;font-size:14px;font-weight:800;
+  padding:12px 20px;
+  background:var(--mc-dark);color:#fff;
+  border:3px solid #000;box-shadow:4px 4px 0 rgba(0,0,0,.5);
+  cursor:pointer;text-decoration:none;
+  transition:transform .1s,box-shadow .1s;
+}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:4px 6px 0 rgba(0,0,0,.5);}
+.hero-cta.green{background:var(--mc-green2);}
 
-        /* Search & Filter UI */
-        .search-container { display: flex; gap: 12px; max-width: 650px; margin: 0 auto 20px auto; position: relative; width: 100%; z-index: 100; }
-        .reth-search { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; color: var(--text-main); font-size: 14px; font-weight: 700; text-transform: uppercase; flex: 1; padding: 22px 28px; backdrop-filter: blur(15px); outline: none; }
-        .category-container { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 1000px; margin: 0 auto 60px auto; position: relative; z-index: 50; align-items: center; }
-        .chip { background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 50px; font-size: 8px; font-weight: 900; text-transform: uppercase; cursor: pointer; color: var(--text-dim); transition: 0.2s; backdrop-filter: blur(10px); }
-        .chip:hover, .chip.active { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
-        .chip-plus { background: var(--text-main); color: var(--bg-color); border: none; padding: 8px 12px; border-radius: 50px; font-size: 10px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-        .chip-plus:hover { transform: scale(1.1) rotate(90deg); }
+.section-wrap{padding:40px 40px 60px;max-width:1100px;}
+.section-title-mc{
+  font-family:'Sarabun',sans-serif;font-weight:800;
+  font-size:clamp(14px,1.6vw,18px);
+  color:var(--mc-dark);
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-title-mc::after{content:'';flex:1;height:3px;background:linear-gradient(to right,var(--mc-green),transparent);}
+.module-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:20px;margin-bottom:20px;
+}
+.mc-card{
+  background:#fff;
+  border:3px solid #ccc;
+  border-bottom:5px solid #aaa;
+  border-right:5px solid #aaa;
+  cursor:pointer;
+  transition:transform .15s,box-shadow .15s;
+  overflow:hidden;position:relative;
+}
+.mc-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.15);}
+.mc-card-img-placeholder{
+  width:100%;height:120px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;border-bottom:3px solid #ccc;
+  position:relative;overflow:hidden;
+}
+.mc-card-body{padding:16px;}
+.mc-card-tag{
+  font-family:'Sarabun',sans-serif;font-weight:800;font-size:11px;
+  padding:4px 9px;margin-bottom:10px;display:inline-block;
+  border:2px solid;
+}
+.mc-card h3{font-size:17px;font-weight:800;margin-bottom:6px;color:var(--text-dark);}
+.mc-card p{font-size:14px;color:var(--text-mid);line-height:1.7;}
+.mc-card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;
+  background:#f8f8f5;border-top:2px solid #eee;
+}
+.mc-card-footer span{font-size:13px;font-weight:700;color:var(--text-light);}
+.mc-card-footer .arrow{font-weight:900;font-size:18px;color:var(--mc-green2);transition:transform .15s;}
+.mc-card:hover .arrow{transform:translateX(4px);}
 
-        /* Badges */
-        .ver-badge { position: absolute; top: 12px; left: 12px; width: 26px; height: 26px; z-index: 30; }
-        .status-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.8); border-radius: 8px; padding: 5px 10px; font-size: 8px; font-weight: 900; z-index: 10; display: flex; align-items: center; gap: 6px; color: white; }
-        .dot { height: 6px; width: 6px; border-radius: 50%; background: #22c55e; }
-        .key-badge { position: absolute; top: 12px; left: 45px; border-radius: 8px; padding: 5px 10px; font-size: 8px; font-weight: 900; z-index: 15; text-transform: uppercase; }
-        .bg-key { background: #ef4444; color: white; }
-        .bg-keyless { background: #eab308; color: black; }
-        
-        /* Stats & Buttons */
-        .btn-copy-white { background: #ffffff; color: #000000; border: 1.5px solid var(--border-color); text-align: center; padding: 14px; border-radius: 14px; font-size: 11px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-bottom: 15px; width: 100%; display: block; transition: 0.2s; }
-        .stats-row { display: flex; gap: 15px; font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px; }
-        .stats-row i { margin-right: 4px; }
-        .stats-row span { display: flex; align-items: center; }
+.page{display:none;}
+.page.active{display:block;}
 
-        /* Modals & Code */
-        #modal, #trendingModal { backdrop-filter: blur(25px); position: fixed; inset: 0; z-index: 2000; }
-        .modal-inner { background: var(--modal-bg); border: 2px solid var(--border-color); border-radius: 40px; width: 100%; padding: 40px; position: relative; }
-        #mCode { background: var(--code-bg); color: var(--code-text); border: 2px solid var(--border-color); padding: 20px; border-radius: 18px; font-family: monospace; font-size: 10px; max-height: 180px; overflow: auto; white-space: pre-wrap; word-break: break-all; }
-        
-        /* Toast & Load More */
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #22c55e; color: white; padding: 12px 30px; border-radius: 50px; font-size: 11px; font-weight: 900; text-transform: uppercase; z-index: 3000; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .btn-load-more { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); padding: 18px 50px; border-radius: 20px; font-size: 11px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.4s; letter-spacing: 0.15em; backdrop-filter: blur(10px); }
-        .btn-load-more:hover { background: var(--text-main); color: var(--bg-color); }
-        
-        .reth-footer { margin-top: 40px; padding: 40px 0; border-top: 1px solid var(--border-color); text-align: center; }
-        .trending-item { background: var(--card-bg); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
-        .trending-item:hover { background: var(--text-main); color: var(--bg-color); }
-    </style>
+.content{padding:32px 40px 80px;max-width:980px;}
+
+.breadcrumb{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;color:var(--text-light);
+  margin-bottom:24px;
+  padding:10px 16px;background:#fff;border:2px solid #ddd;
+  box-shadow:2px 2px 0 #ccc;
+}
+.breadcrumb a{color:var(--mc-green2);text-decoration:none;cursor:pointer;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb .sep{color:#ccc;}
+
+.lesson-header{
+  background:var(--mc-dark);color:#fff;
+  padding:28px 30px;
+  border:3px solid #111;
+  border-bottom:5px solid var(--mc-green);
+  margin-bottom:28px;
+  display:flex;align-items:flex-start;gap:16px;
+}
+.lesson-header-icon{
+  width:56px;height:56px;flex-shrink:0;
+  border:3px solid #555;
+  image-rendering:pixelated;object-fit:cover;
+}
+.lesson-meta-tag{font-family:'Sarabun',sans-serif;font-weight:800;font-size:12px;color:var(--mc-green);margin-bottom:8px;}
+.lesson-title{font-family:'Press Start 2P',monospace;font-size:clamp(11px,1.8vw,16px);color:#fff;line-height:1.7;margin-bottom:10px;}
+.lesson-desc{font-size:15px;color:#aaa;line-height:1.8;}
+
+.prose h2{
+  font-family:'Sarabun',sans-serif;font-weight:800;
+  font-size:clamp(14px,1.5vw,17px);
+  color:#fff;
+  margin:32px 0 14px;
+  padding:10px 14px;
+  background:var(--mc-green);
+  border-left:5px solid var(--mc-green3);
+  box-shadow:3px 3px 0 rgba(0,0,0,.2);
+  display:flex;align-items:center;gap:10px;
+}
+.prose h3{font-size:16px;font-weight:800;color:var(--mc-brown);margin:22px 0 10px;border-bottom:2px solid #e0ddd5;padding-bottom:6px;}
+.prose p{font-size:15px;color:var(--text-mid);line-height:2;margin-bottom:12px;}
+.prose ul,.prose ol{padding-left:22px;margin-bottom:14px;}
+.prose li{font-size:15px;color:var(--text-mid);line-height:2;margin-bottom:4px;}
+
+.codeblock{
+  background:var(--mc-dark);
+  border:3px solid #111;
+  border-bottom:4px solid var(--mc-green3);
+  margin:14px 0;overflow:hidden;
+}
+.codeblock-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;
+  background:rgba(255,255,255,.04);
+  border-bottom:2px solid #333;
+}
+.codeblock-label{font-family:'Sarabun',sans-serif;font-weight:800;font-size:13px;color:var(--mc-green);}
+.copy-btn{
+  font-family:'Sarabun',sans-serif;font-weight:700;font-size:12px;color:#888;
+  background:none;border:1px solid #444;padding:4px 10px;cursor:pointer;
+  transition:all .15s;
+}
+.copy-btn:hover{color:#fff;border-color:#888;}
+.codeblock pre{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  padding:16px 18px;overflow-x:auto;line-height:1.8;color:#e8e8e8;
+}
+.k{color:#62B330;}
+.s{color:#5DADE2;}
+.v{color:#F0A500;}
+.c{color:#555;font-style:italic;}
+.b{color:#A9CCE3;}
+.y{color:#F7DC6F;}
+.p{color:#C39BD3;}
+
+.callout{
+  display:flex;gap:12px;padding:14px 18px;margin:14px 0;
+  font-size:15px;line-height:1.8;
+  border:2px solid;border-left:5px solid;
+  background:#fff;
+}
+.callout-icon{font-size:20px;flex-shrink:0;}
+.callout.tip{border-color:#62B330;color:#2d6a10;}
+.callout.warn{border-color:var(--mc-yellow);color:#7a5c00;}
+.callout.info{border-color:var(--mc-blue);color:#1a5276;}
+.callout.danger{border-color:var(--mc-red);color:#922b21;}
+
+.tbl-wrap{overflow-x:auto;margin:14px 0;border:3px solid #ccc;border-bottom:4px solid #aaa;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--mc-dark);}
+th{
+  font-family:'Sarabun',sans-serif;font-weight:800;font-size:13px;
+  color:var(--mc-green);padding:10px 14px;text-align:left;
+  border-right:1px solid #333;
+}
+td{
+  font-size:14px;padding:10px 14px;
+  border-bottom:1px solid #e8e5df;border-right:1px solid #e8e5df;
+  color:var(--text-mid);vertical-align:top;line-height:1.7;
+  background:#fff;
+}
+tr:nth-child(even) td{background:#f9f9f6;}
+tr:hover td{background:#f0ede6;}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px;background:#f0ede6;padding:2px 5px;}
+.tg{display:inline-block;padding:2px 8px;font-size:11px;font-weight:800;border:2px solid;font-family:'Sarabun',sans-serif;}
+.tg-green{color:var(--mc-green2);border-color:var(--mc-green2);}
+.tg-blue{color:var(--mc-blue);border-color:var(--mc-blue);}
+.tg-orange{color:var(--mc-orange);border-color:var(--mc-orange);}
+.tg-red{color:var(--mc-red);border-color:var(--mc-red);}
+.tg-purple{color:var(--mc-purple);border-color:var(--mc-purple);}
+.tg-yellow{color:#a07800;border-color:var(--mc-yellow);}
+
+.syntax-box{background:var(--mc-dark);border:3px solid #111;padding:20px;margin:14px 0;}
+.syntax-line{font-family:'JetBrains Mono',monospace;font-size:14px;line-height:2.6;display:flex;flex-wrap:wrap;gap:6px;}
+.syn-part{padding:3px 10px;cursor:help;font-size:13px;}
+.syn-cmd{background:#2d5016;color:#62B330;border:1px solid #3a6620;}
+.syn-sel{background:#1a3a5c;color:#5DADE2;border:1px solid #1f4a7a;}
+.syn-arg{background:#3a2a00;color:#F0A500;border:1px solid #5a4200;}
+.syn-val{background:#2a1a3a;color:#C39BD3;border:1px solid #3a2a5a;}
+.syn-opt{background:#1a2a1a;color:#aaa;border:1px dashed #444;}
+.syntax-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding-top:14px;border-top:1px solid #333;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:13px;color:#888;font-family:'Sarabun',sans-serif;}
+.leg-dot{width:12px;height:12px;}
+
+.ai-wrapper{
+  background:#fff;border:3px solid #ccc;border-bottom:5px solid var(--mc-green);
+  padding:28px;margin-bottom:30px;
+}
+.ai-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #eee;}
+.ai-avatar{width:48px;height:48px;flex-shrink:0;border:3px solid #333;image-rendering:pixelated;}
+.ai-header h3{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--mc-dark);margin-bottom:6px;}
+.ai-header p{font-size:14px;color:var(--text-mid);line-height:1.7;}
+.quick-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.qchip{
+  font-size:13px;font-weight:700;
+  padding:7px 14px;
+  background:#f0ede6;border:2px solid #ccc;
+  border-bottom:3px solid #aaa;cursor:pointer;
+  transition:all .15s;color:var(--text-dark);
+}
+.qchip:hover{background:var(--mc-green);color:#fff;border-color:var(--mc-green3);}
+.ai-input-area textarea{
+  width:100%;
+  background:#f8f8f5;border:3px solid #aaa;
+  border-bottom:4px solid #888;
+  font-family:'Sarabun',sans-serif;font-size:14px;
+  padding:14px;resize:vertical;min-height:90px;
+  color:var(--text-dark);outline:none;line-height:1.8;
+  transition:border-color .2s;
+}
+.ai-input-area textarea:focus{border-color:var(--mc-green);}
+.ai-send-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:8px;}
+.ai-send-row span{font-size:13px;color:var(--text-light);font-weight:600;}
+.ai-send-btn{
+  font-family:'Sarabun',sans-serif;font-weight:800;font-size:14px;
+  background:var(--mc-green);color:#fff;
+  border:none;padding:12px 22px;
+  box-shadow:var(--shadow);cursor:pointer;
+  transition:background .15s,transform .1s;
+}
+.ai-send-btn:hover{background:var(--mc-green2);transform:translateY(-1px);}
+.ai-send-btn:disabled{background:#aaa;cursor:not-allowed;transform:none;}
+.ai-response-box{display:none;margin-top:20px;background:var(--mc-dark);border:3px solid #333;padding:18px;}
+.ai-response-box.visible{display:block;}
+.ai-response-inner{font-family:'JetBrains Mono',monospace;font-size:13px;color:#e8e8e8;line-height:1.8;}
+.ai-response-inner code{background:rgba(255,255,255,.08);padding:2px 6px;color:#62B330;}
+
+footer{background:var(--mc-dark);border-top:4px solid var(--mc-green);padding:30px;text-align:center;}
+footer p{font-family:'Sarabun',sans-serif;font-weight:700;font-size:13px;color:#555;line-height:2.5;}
+footer p span{color:var(--mc-green);}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .content,.section-wrap{padding:20px 16px 60px;}
+  .topbar-nav{display:none;}
+  .hamburger{display:block;}
+}
+@media(max-width:600px){
+  .hero{padding:40px 20px 40px;}
+  .module-grid{grid-template-columns:1fr;}
+  .mc-btn-buy{display:none;}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.page.active .content,.page.active .section-wrap{animation:fadeUp .25s ease;}
+</style>
 </head>
-<body class="p-6 md:p-16">
+<body>
 
-    <canvas id="bg-canvas"></canvas>
-    <div id="toast">Copied to Clipboard!</div>
-
-    <div class="nav-controls">
-        <button onclick="setTheme('dark')" id="dBtn" class="t-btn">Dark</button>
-        <button onclick="setTheme('light')" id="lBtn" class="t-btn">Light</button>
-        <a href="https://discord.gg/Yp2bXVvU9B" target="_blank" class="discord-btn"><i class="fa-brands fa-discord mr-2"></i> Discord</a>
+<!-- ═══════════ แถบบนสุด ═══════════ -->
+<header class="topbar">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <a class="topbar-logo" href="#" onclick="showPage('home')">
+    <div class="logo-block">
+      <img src="https://cdn.icon-icons.com/icons2/1381/PNG/512/minecraft_94415.png" onerror="this.src='';this.parentNode.style.background='#4A7C3F';this.parentNode.innerHTML='⬛'">
     </div>
-
-    <div class="max-w-7xl mx-auto relative z-10">
-        <header class="py-20 text-center flex flex-col items-center">
-            <h1 class="reth-title"><span class="text-[12px] not-italic align-middle mr-2 tracking-widest opacity-50">BETA</span>RETH</h1>
-            <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.5em] mt-5">Official Script Hub</p>
-        </header>
-
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="SEARCH FOR SCRIPTS..." class="reth-search">
-            <button onclick="toggleFilter()" class="t-btn !px-8 !py-0 !rounded-2xl">Filter</button>
-            <div id="filterMenu" class="absolute top-full mt-4 right-0 w-64 bg-[var(--modal-bg)] border border-[var(--border-color)] rounded-2xl p-6 hidden z-50 shadow-2xl">
-                <h3 class="text-[9px] font-black text-zinc-500 uppercase tracking-widest mb-4">Quick Filters</h3>
-                <label class="flex justify-between py-2 cursor-pointer text-[11px] font-bold uppercase"><span>Verified Only</span><input type="checkbox" id="fVer" onchange="filterRefresh()"></label>
-                <label class="flex justify-between py-2 cursor-pointer text-[11px] font-bold uppercase"><span>Keyless Only</span><input type="checkbox" id="fKey" onchange="filterRefresh()"></label>
-                <label class="flex justify-between py-2 cursor-pointer text-[11px] font-bold uppercase"><span>Universal Only</span><input type="checkbox" id="fUni" onchange="filterRefresh()"></label>
-            </div>
-        </div>
-
-        <div class="category-container">
-            <button class="chip active" onclick="filterByCategory('', this)">All Games</button>
-            <button class="chip" onclick="filterByCategory('Blox Fruits', this)">Blox Fruits</button>
-            <button class="chip" onclick="filterByCategory('Pet Simulator 99', this)">Pet Sim 99</button>
-            <button class="chip" onclick="filterByCategory('Prison Life', this)">Prison Life</button>
-            <button class="chip" onclick="filterByCategory('Build a Boat for Treasure', this)">Build a Boat</button>
-            <button class="chip" onclick="filterByCategory('Fling Things and People', this)">Fling Things</button>
-            <button class="chip" onclick="filterByCategory('Brookhaven', this)">Brookhaven</button>
-            <button class="chip" onclick="filterByCategory('Murder Mystery 2', this)">MM2</button>
-            <button class="chip-plus" onclick="openTrending()"><i class="fa-solid fa-plus"></i></button>
-        </div>
-
-        <div id="scriptGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-        
-        <div class="flex justify-center py-24" id="loadMoreArea" style="display: none;">
-            <button onclick="loadMore()" class="btn-load-more">Load More Scripts</button>
-        </div>
-
-        <footer class="reth-footer">
-            <div class="flex flex-col items-center gap-3">
-                <p class="text-[10px] font-black uppercase text-zinc-500 tracking-[0.4em]">Powered By</p>
-                <a href="https://scriptblox.com" target="_blank" class="credit-link text-xl font-bold italic tracking-tighter">SCRIPT<span class="text-zinc-500">BLOX</span></a>
-                <p class="text-[9px] font-bold text-zinc-600 uppercase mt-4 tracking-widest">© 2026 RETH OFFICIAL — Crafted for Excellence</p>
-            </div>
-        </footer>
+    <div class="logo-wordmark">
+      <span>BEDROCK</span>
+      <span>CMD ENCYCLOPEDIA</span>
     </div>
+  </a>
+  <div class="topbar-search">
+    <span class="si">🔍</span>
+    <input type="text" placeholder="ค้นหาคอมมานด์..." id="searchInput" oninput="doSearch(this.value)">
+  </div>
+  <nav class="topbar-nav">
+    <a href="#" onclick="showPage('home')" id="tnav-home" class="tactive">หน้าหลัก</a>
+    <a href="#" onclick="showPage('theory')" id="tnav-theory">ทฤษฎี</a>
+    <a href="#" onclick="showPage('basic')" id="tnav-basic">พื้นฐาน</a>
+    <a href="#" onclick="showPage('execute')" id="tnav-execute">EXECUTE</a>
+    <a href="#" onclick="showPage('advanced')" id="tnav-advanced">ขั้นสูง</a>
+    <a href="#" onclick="showPage('ai')" id="tnav-ai">🤖 ถาม AI</a>
+  </nav>
+  <a class="mc-btn-buy" onclick="showPage('ai')">ถาม AI ▶</a>
+</header>
 
-    <div id="modal" class="fixed inset-0 hidden items-center justify-center p-6 bg-black/80 opacity-0 transition-opacity duration-300">
-        <div class="modal-inner max-w-2xl">
-            <button onclick="closeModal()" class="absolute top-8 right-8 text-[10px] font-black text-zinc-500 uppercase">Close [X]</button>
-            <h2 id="mTitle" class="text-2xl font-black italic uppercase mb-2"></h2>
-            <div id="mStatsRow" class="stats-row mb-6"></div>
-            <div id="modalImgArea" class="border-2 border-[var(--border-color)] rounded-2xl overflow-hidden aspect-video bg-black mb-6"><img id="mImg" src="" class="w-full h-full object-cover"></div>
-            <div class="flex gap-4 mb-8">
-                <button onclick="copyFromModal()" class="bg-white text-black border-2 border-[var(--border-color)] flex-1 py-4 rounded-xl font-black text-[11px] uppercase transition hover:bg-zinc-200">Copy Script</button>
-                <a id="mLink" href="#" target="_blank" class="flex-1 border-2 border-[var(--border-color)] rounded-xl flex items-center justify-center text-[11px] font-black uppercase text-[var(--text-main)]">Source Link</a>
-            </div>
-            <div id="mCode"></div>
-        </div>
+<!-- ═══════════ แถบด้านข้าง ═══════════ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo-area">
+    <img src="https://art.pixilart.com/a0df84fee221c41.png" onerror="this.outerHTML='<span style=font-size:24px>⬛</span>'">
+    <span>BEDROCK<br>สารานุกรม</span>
+  </div>
+
+  <div class="sidebar-section">เมนูหลัก</div>
+  <a class="nav-item active" onclick="showPage('home')" id="snav-home">
+    <img src="https://minecraft.wiki/images/thumb/Command_Block_Texture_Reveal.png/240px-Command_Block_Texture_Reveal.png?44f5a" onerror="this.outerHTML='<span style=font-size:20px>🏠</span>'">
+    หมวดทั้งหมด
+    <span class="nav-count">8</span>
+  </a>
+
+  <div class="sidebar-section">หมวดเนื้อหา</div>
+  <a class="nav-item" onclick="showPage('theory')" id="snav-theory">
+    <img src="https://minecraft.wiki/images/thumb/Command_Block_Texture_Reveal.png/240px-Command_Block_Texture_Reveal.png?44f5a" onerror="this.outerHTML='<span style=font-size:20px>🎯</span>'">
+    ทฤษฎีและการเล็งเป้า
+    <span class="nav-count">5</span>
+  </a>
+  <a class="nav-item" onclick="showPage('basic')" id="snav-basic">
+    <img src="https://minecraft.wiki/images/thumb/Command_Block_Texture_Reveal.png/240px-Command_Block_Texture_Reveal.png?44f5a" onerror="this.outerHTML='<span style=font-size:20px>📝</span>'">
+    คอมมานด์พื้นฐาน
+    <span class="nav-count">8</span>
+  </a>
+  <a class="nav-item" onclick="showPage('variables')" id="snav-variables">
+    <img src="https://minecraft.wiki/images/thumb/Chain_Command_Block.gif/150px-Chain_Command_Block.gif?7c365" onerror="this.outerHTML='<span style=font-size:20px>📊</span>'">
+    ตัวแปรและคะแนน
+    <span class="nav-count">6</span>
+  </a>
+  <a class="nav-item" onclick="showPage('conditions')" id="snav-conditions">
+    <img src="https://minecraft.wiki/images/thumb/Chain_Command_Block.gif/150px-Chain_Command_Block.gif?7c365" onerror="this.outerHTML='<span style=font-size:20px>🔀</span>'">
+    เงื่อนไขและลอจิก
+    <span class="nav-count">7</span>
+  </a>
+  <a class="nav-item" onclick="showPage('world')" id="snav-world">
+    <img src="https://tse1.mm.bing.net/th/id/OIP.bThrMyNqivGFX9HlNxg9YwAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" onerror="this.outerHTML='<span style=font-size:20px>🌍</span>'">
+    โลกและสิ่งมีชีวิต
+    <span class="nav-count">6</span>
+  </a>
+  <a class="nav-item" onclick="showPage('blocks')" id="snav-blocks">
+    <img src="https://vignette.wikia.nocookie.net/minecraft/images/b/b3/RepeatingCommandBlock.png/revision/latest?cb=20191216020102" onerror="this.outerHTML='<span style=font-size:20px>🧱</span>'">
+    บล็อกและการโคลน
+    <span class="nav-count">4</span>
+  </a>
+  <a class="nav-item" onclick="showPage('execute')" id="snav-execute">
+    <img src="https://minecraft.wiki/images/thumb/Chain_Command_Block.gif/150px-Chain_Command_Block.gif?7c365" onerror="this.outerHTML='<span style=font-size:20px>⚡</span>'">
+    Execute และ Chain
+    <span class="nav-count">6</span>
+  </a>
+  <a class="nav-item" onclick="showPage('advanced')" id="snav-advanced">
+    <img src="https://vignette.wikia.nocookie.net/minecraft/images/b/b3/RepeatingCommandBlock.png/revision/latest?cb=20191216020102" onerror="this.outerHTML='<span style=font-size:20px>🏆</span>'">
+    ระบบขั้นสูง
+    <span class="nav-count">5</span>
+  </a>
+  <a class="nav-item" onclick="showPage('ai')" id="snav-ai">
+    <img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/Homepage_Download-Launcher_Creeper-Logo_500x500.png" onerror="this.outerHTML='<span style=font-size:20px>🤖</span>'">
+    ถาม AI
+  </a>
+</nav>
+
+<!-- ═══════════ เนื้อหาหลัก ═══════════ -->
+<main class="main">
+
+<!-- ══════ หน้าหลัก ══════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-pattern"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">⬛ BEDROCK EDITION · คู่มือฉบับสมบูรณ์</div>
+      <div class="hero-title">BEDROCK COMMAND<br>สารานุกรม</div>
+      <div class="hero-sub">ทุกสิ่งที่คุณต้องรู้เพื่อเชี่ยวชาญคอมมานด์บล็อก — ตัวแปร, การเล็งเป้า, เงื่อนไข, Execute, Scoreboard และระบบเกมครบถ้วน</div>
+      <div class="hero-cta-row">
+        <a class="hero-cta green" onclick="showPage('theory')">เริ่มเรียน →</a>
+        <a class="hero-cta" onclick="showPage('advanced')">ระบบขั้นสูง →</a>
+        <a class="hero-cta" onclick="showPage('ai')">🤖 ถาม AI</a>
+      </div>
     </div>
+  </div>
 
-    <div id="trendingModal" class="fixed inset-0 hidden items-center justify-center p-6 bg-black/80 opacity-0 transition-opacity duration-300">
-        <div class="modal-inner max-w-2xl">
-            <button onclick="closeTrending()" class="absolute top-8 right-8 text-[10px] font-black text-zinc-500 uppercase">Close [X]</button>
-            <h2 class="text-2xl font-black italic uppercase mb-6 tracking-tighter">Trending Game Hubs</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto max-h-[60vh] pr-2">
-                <div class="trending-item" onclick="filterByCategory('Be a Lucky Block', null); closeTrending()">Be a Lucky Block</div>
-                <div class="trending-item" onclick="filterByCategory('Steal a brainrot', null); closeTrending()">Steal a brainrot</div>
-                <div class="trending-item" onclick="filterByCategory('The Strongest Battlegrounds', null); closeTrending()">Strongest Battle</div>
-                <div class="trending-item" onclick="filterByCategory('Prison Life', null); closeTrending()">Prison Life</div>
-                <div class="trending-item" onclick="filterByCategory('Doors', null); closeTrending()">Doors</div>
-                <div class="trending-item" onclick="filterByCategory('Universal', null); closeTrending()">Universal Hub</div>
-            </div>
+  <div class="section-wrap">
+    <div class="section-title-mc">หมวดเนื้อหาทั้งหมด</div>
+    <div class="module-grid">
+
+      <div class="mc-card" onclick="showPage('theory')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#3a2060,#6a40a0)">
+          <img src="https://cdn3.emoji.gg/emojis/2277-command-block.png" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>🎯</span>'">
         </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-purple">เริ่มต้น</div>
+          <h3>ทฤษฎีและการเล็งเป้า</h3>
+          <p>ประเภทของบล็อก, เกมติ๊ก และ Target Selector พร้อมตัวกรองทุกอย่าง</p>
+        </div>
+        <div class="mc-card-footer"><span>5 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
+      <div class="mc-card" onclick="showPage('basic')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#1a3a5c,#2a5a8c)">
+          <img src="https://repository-images.githubusercontent.com/434928472/21b73ef3-c79c-427d-a933-2951b338bba8" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>📝</span>'">
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-blue">เริ่มต้น</div>
+          <h3>คอมมานด์พื้นฐาน</h3>
+          <p>say, tell, title, give, tp, effect, gamerule — คอมมานด์หลักทุกตัว</p>
+        </div>
+        <div class="mc-card-footer"><span>8 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
+      <div class="mc-card" onclick="showPage('variables')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#1a4a3a,#2a7050)">
+          <img src="https://minecraft.wiki/images/thumb/Chain_Command_Block_JE3_BE2.png/240px-Chain_Command_Block_JE3_BE2.png?e07de" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>📊</span>'">
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-green">กลาง</div>
+          <h3>ตัวแปรและ Scoreboard</h3>
+          <p>เก็บตัวเลข, ติดตามสถิติ, ค่าสุ่ม — ตัวแปรสำหรับ Bedrock</p>
+        </div>
+        <div class="mc-card-footer"><span>6 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
+      <div class="mc-card" onclick="showPage('conditions')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#3a1a1a,#6a2a2a)">
+          <img src="https://minecraft.wiki/images/thumb/Chain_Command_Block_JE3_BE2.png/240px-Chain_Command_Block_JE3_BE2.png?e07de" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>🔀</span>'">
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-red">กลาง</div>
+          <h3>เงื่อนไขและลอจิก</h3>
+          <p>if/unless, ตรวจสอบคะแนน, ตรวจจับบล็อก — สร้างลอจิกเกมจริง</p>
+        </div>
+        <div class="mc-card-footer"><span>7 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
+      <div class="mc-card" onclick="showPage('world')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#1a3a1a,#2a5a2a)">
+          <img src=https://minecraft.wiki/images/thumb/Chain_Command_Block_JE3_BE2.png/240px-Chain_Command_Block_JE3_BE2.png?e07de" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>🌍</span>'">
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-green">กลาง</div>
+          <h3>โลกและสิ่งมีชีวิต</h3>
+          <p>summon, kill, weather, time, damage — ควบคุมโลกของคุณได้ทุกอย่าง</p>
+        </div>
+        <div class="mc-card-footer"><span>6 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
+      <div class="mc-card" onclick="showPage('blocks')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#3a2a1a,#6a4a2a)">
+          <img src="https://minecraft.wiki/images/thumb/Chain_Command_Block_JE3_BE2.png/240px-Chain_Command_Block_JE3_BE2.png?e07de" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>🧱</span>'">
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-orange">กลาง</div>
+          <h3>บล็อกและการโคลน</h3>
+          <p>fill, setblock, clone — สร้างและจัดการโลกด้วยระดับบล็อก</p>
+        </div>
+        <div class="mc-card-footer"><span>4 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
+      <div class="mc-card" onclick="showPage('execute')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#3a1a1a,#7a1a1a)">
+          <img src="https://media.forgecdn.net/avatars/thumbnails/619/483/256/256/638006937156196918.png" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>⚡</span>'">
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-red">ขั้นสูง</div>
+          <h3>Execute และ Chain</h3>
+          <p>คอมมานด์ที่ทรงพลังที่สุด — รันคอมมานด์ในฐานะสิ่งมีชีวิตอื่น พร้อมเงื่อนไข</p>
+        </div>
+        <div class="mc-card-footer"><span>6 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
+      <div class="mc-card" onclick="showPage('advanced')">
+        <div class="mc-card-img-placeholder" style="background:linear-gradient(135deg,#2a1a3a,#4a2a6a)">
+          <img src="https://tse2.mm.bing.net/th/id/OIP.r95FU8128DM0uoAGYduLSQAAAA?r=0&pid=ImgDet&w=300&h=207&rs=1&o=7&rm=3" style="width:72px;height:72px;image-rendering:pixelated" onerror="this.outerHTML='<span style=font-size:52px>🏆</span>'">
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-card-tag tg-purple">ผู้เชี่ยวชาญ</div>
+          <h3>ระบบขั้นสูง</h3>
+          <p>ตัวนับเวลา, ลูปมินิเกม, ความสามารถพิเศษ, ของรางวัลสุ่ม — ระบบเกมครบถ้วน</p>
+        </div>
+        <div class="mc-card-footer"><span>5 หัวข้อ</span><span class="arrow">›</span></div>
+      </div>
+
     </div>
+  </div>
+</div>
 
-    <script>
-        // --- 3D ENGINE (MAINTAINED) ---
-        const canvas = document.getElementById('bg-canvas');
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const shapes = [];
+<!-- ══════ ทฤษฎี ══════ -->
+<div id="page-theory" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>ทฤษฎีและการเล็งเป้า</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://art.pixilart.com/a0df84fee221c41.png" onerror="this.outerHTML='<span style=font-size:48px>🎯</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 1 · ทฤษฎีและการเล็งเป้า</div>
+        <div class="lesson-title">Command Block &amp; Target Selectors</div>
+        <div class="lesson-desc">รากฐานของทุกสิ่ง เข้าใจการทำงานของคอมมานด์บล็อกและวิธีเล็งเป้าคอมมานด์ให้ถูกต้อง</div>
+      </div>
+    </div>
+    <div class="prose">
+      <h2>⬛ ประเภทคอมมานด์บล็อก</h2>
+      <p>Bedrock Edition มีบล็อก 3 ประเภท แต่ละแบบทำงานต่างกัน:</p>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>ประเภท</th><th>สี</th><th>การทำงาน</th><th>ใช้ทำอะไร</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tg tg-blue">IMPULSE</span></td><td>น้ำเงิน/ม่วง</td><td>รัน <strong>ครั้งเดียว</strong> เมื่อได้รับสัญญาณ Redstone</td><td>เหตุการณ์กดปุ่ม</td></tr>
+        <tr><td><span class="tg tg-green">CHAIN</span></td><td>เขียว</td><td>รันต่อจากบล็อกที่ชี้มาหา</td><td>คำสั่งต่อเนื่อง</td></tr>
+        <tr><td><span class="tg tg-purple">REPEAT</span></td><td>ม่วง</td><td>รันทุกติ๊ก (20 ครั้ง/วินาที) ขณะมีพลังงาน</td><td>ตรวจสอบต่อเนื่อง, ตัวนับเวลา</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip"><span class="callout-icon">💡</span><span>รับคอมมานด์บล็อกด้วย <code>/give @s command_block</code> ต้องเปิดโหมด Cheats และอยู่ในโหมด Creative</span></div>
+    <div class="prose">
+      <h2>🎯 Target Selectors (การเล็งเป้า)</h2>
+      <p>Selector กำหนดว่าคอมมานด์จะส่งผลกับ <em>ใคร</em> เสมอขึ้นต้นด้วย <code>@</code></p>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Selector</th><th>เป้าหมาย</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tg tg-green">@s</span></td><td>ตัวผู้รันคอมมานด์เอง</td><td class="mono">effect @s speed 30 2</td></tr>
+        <tr><td><span class="tg tg-green">@p</span></td><td>ผู้เล่นที่ใกล้ที่สุด</td><td class="mono">tp @p 0 64 0</td></tr>
+        <tr><td><span class="tg tg-green">@a</span></td><td>ผู้เล่นทุกคนออนไลน์</td><td class="mono">give @a apple 5</td></tr>
+        <tr><td><span class="tg tg-green">@r</span></td><td>ผู้เล่นสุ่มหนึ่งคน</td><td class="mono">give @r diamond 1</td></tr>
+        <tr><td><span class="tg tg-green">@e</span></td><td>สิ่งมีชีวิตทุกอย่าง (มอนสเตอร์, ไอเทมตก ฯลฯ)</td><td class="mono">kill @e[type=zombie]</td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose"><h2>🔧 ตัวกรอง Selector [ ]</h2></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>ตัวกรอง</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">r=10</td><td>ภายในระยะ 10 บล็อก</td><td class="mono">@a[r=10]</td></tr>
+        <tr><td class="mono">rm=5</td><td>ไกลกว่า 5 บล็อก</td><td class="mono">@a[rm=5,r=20]</td></tr>
+        <tr><td class="mono">type=zombie</td><td>ประเภทสิ่งมีชีวิต</td><td class="mono">@e[type=zombie]</td></tr>
+        <tr><td class="mono">name=Boss</td><td>สิ่งมีชีวิตที่มีชื่อนี้</td><td class="mono">@e[name=Boss]</td></tr>
+        <tr><td class="mono">tag=vip</td><td>มีแท็กนี้</td><td class="mono">@a[tag=vip]</td></tr>
+        <tr><td class="mono">tag=!vip</td><td>ไม่มีแท็กนี้</td><td class="mono">@a[tag=!vip]</td></tr>
+        <tr><td class="mono">scores={kills=10..}</td><td>คะแนน 10 ขึ้นไป</td><td class="mono">@a[scores={kills=10..}]</td></tr>
+        <tr><td class="mono">scores={lives=..0}</td><td>คะแนน 0 หรือน้อยกว่า</td><td class="mono">@a[scores={lives=..0}]</td></tr>
+        <tr><td class="mono">c=1</td><td>จำกัด 1 ผล (Bedrock)</td><td class="mono">@e[type=item,c=1]</td></tr>
+        <tr><td class="mono">hasitem={item=sword}</td><td>มีไอเทมนี้ในกระเป๋า (Bedrock)</td><td class="mono">@a[hasitem={item=diamond_sword}]</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><span>Bedrock ใช้ <strong>c=</strong> สำหรับจำกัดจำนวน ไม่ใช่ <strong>limit=</strong> (อันนั้นคือ Java Edition)</span></div>
+    <div class="prose"><h2>📍 ประเภทพิกัด</h2></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Prefix</th><th>ประเภท</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td><em>(ไม่มี)</em></td><td>พิกัดแน่นอน</td><td>ตำแหน่งโลกที่แน่นอน</td><td class="mono">tp @p 100 64 200</td></tr>
+        <tr><td class="mono">~</td><td>พิกัดสัมพัทธ์</td><td>ระยะจากตำแหน่งผู้รัน</td><td class="mono">tp @p ~0 ~5 ~0</td></tr>
+        <tr><td class="mono">^</td><td>พิกัดท้องถิ่น</td><td>สัมพัทธ์กับทิศที่หันหน้า</td><td class="mono">tp @p ^ ^ ^3</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
 
-        function init3D() {
-            renderer.setSize(window.innerWidth, window.innerHeight); camera.position.z = 35;
-            const geoPool = [new THREE.IcosahedronGeometry(2,0), new THREE.BoxGeometry(3,3,3), new THREE.TetrahedronGeometry(2.5)];
-            for(let i=0; i<45; i++) {
-                const mat = new THREE.MeshBasicMaterial({ color: 0x4f6b8f, wireframe: true, transparent: true, opacity: 0.15 });
-                const mesh = new THREE.Mesh(geoPool[Math.floor(Math.random()*3)], mat);
-                mesh.position.set((Math.random()-0.5)*100, (Math.random()-0.5)*80, (Math.random()-0.5)*50);
-                mesh.userData = { speedY: 0.02 + Math.random()*0.06, rot: Math.random()*0.01 };
-                scene.add(mesh); shapes.push(mesh);
-            }
-        }
-        function animate3D() {
-            requestAnimationFrame(animate3D);
-            shapes.forEach(s => { 
-                s.position.y += s.userData.speedY; 
-                s.rotation.x += s.userData.rot; s.rotation.y += s.userData.rot; 
-                if(s.position.y > 40) s.position.y = -40; 
-            });
-            renderer.render(scene, camera);
-        }
+<!-- ══════ พื้นฐาน ══════ -->
+<div id="page-basic" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>คอมมานด์พื้นฐาน</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://art.pixilart.com/a0df84fee221c41.png" onerror="this.outerHTML='<span style=font-size:48px>📝</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 2 · คอมมานด์พื้นฐาน</div>
+        <div class="lesson-title">คอมมานด์ Bedrock ที่จำเป็น</div>
+        <div class="lesson-desc">คอมมานด์พื้นฐานทุกตัวที่จะใช้ในทุกโปรเจกต์</div>
+      </div>
+    </div>
+    <div class="prose"><h2>💬 การส่งข้อความ</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">say · tell · tellraw · title</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># ประกาศให้ทุกคนในแชท</span>
+<span class="k">say</span> สวัสดีจากคอมมานด์บล็อก!
 
-        // --- DATA LOGIC ---
-        let allScripts = []; let currentPage = 1; let currentQuery = "";
-        const verStar = `<svg viewBox="0 0 24 24" class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L14.39 3.46L17.77 2.82L18.89 6.04L22.14 7.02L21.31 10.33L23 13.17L20.61 15.63L21.25 19.01L18.03 20.13L17.05 23.38L13.74 22.55L10.9 24.24L8.44 21.85L5.06 22.49L3.94 19.27L0.69 18.29L1.52 14.98L-0.17 12.14L2.22 9.68L1.58 6.3L4.8 5.18L5.78 1.93L9.09 2.76L11.93 1.07Z" fill="#1D9BF0"/><path d="M9.5 15.5l-3.5-3.5 1.4-1.4 2.1 2.1 5.6-5.6 1.4 1.4-7 7z" fill="white"/></svg>`;
+<span class="c"># ส่งข้อความส่วนตัว</span>
+<span class="k">tell</span> <span class="s">@p</span> คุณคือผู้ที่ถูกเลือก!
 
-        async function fetchScripts(q = "", p = 1, append = false) {
-            if (!append) { document.getElementById('scriptGrid').innerHTML = ""; allScripts = []; }
-            currentQuery = q; currentPage = p;
-            const api = q ? `https://scriptblox.com/api/script/search?q=${encodeURIComponent(q)}&max=20&page=${p}` : `https://scriptblox.com/api/script/fetch?page=${p}&max=20`;
-            try {
-                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(api)}`);
-                const data = await res.json();
-                const newBatch = data.result.scripts || data.result.docs || [];
-                const oldLength = allScripts.length;
-                allScripts = [...allScripts, ...newBatch];
-                renderCards(newBatch, append, oldLength);
-                document.getElementById('loadMoreArea').style.display = (currentPage < (data.result.totalPages || 1)) ? 'flex' : 'none';
-            } catch (e) { console.error(e); }
-        }
+<span class="c"># ข้อความสีสัน (§6=ทอง §c=แดง §a=เขียว §l=ตัวหนา)</span>
+<span class="k">tellraw</span> <span class="s">@a</span> {"rawtext":[{"text":"§6§lยินดีต้อนรับสู่สนามรบ!"}]}
 
-        function renderCards(scripts, append, startIdx) {
-            const grid = document.getElementById('scriptGrid');
-            const fV = document.getElementById('fVer').checked, fK = document.getElementById('fKey').checked, fU = document.getElementById('fUni').checked;
-            
-            const filtered = scripts.filter(s => {
-                const mVer = !fV || s.verified;
-                const mKey = !fK || s.key === false;
-                const mUni = !fU || (s.game.name.toLowerCase().includes('universal') || s.game.name.toLowerCase().includes('all games'));
-                return mVer && mKey && mUni;
-            });
+<span class="c"># ตัวหนังสือขนาดใหญ่บนหน้าจอ</span>
+<span class="k">title</span> <span class="s">@a</span> title §c§lเริ่มรอบ!
+<span class="k">title</span> <span class="s">@a</span> subtitle §7รอดให้ครบ 60 วินาที
+<span class="k">title</span> <span class="s">@a</span> actionbar §a❤ 20 HP  |  §e⚔ 3 คิล
+<span class="k">title</span> <span class="s">@a</span> times 10 40 10   <span class="c"># เฟดเข้า ค้าง เฟดออก (ติ๊ก)</span></pre></div>
+    <div class="prose"><h2>✈ เทเลพอร์ต</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">tp / teleport</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">tp</span> <span class="s">@p</span> <span class="v">100 64 200</span>           <span class="c"># พิกัดแน่นอน</span>
+<span class="k">tp</span> <span class="s">@a</span> <span class="v">~0 ~5 ~0</span>            <span class="c"># เหนือผู้เล่นแต่ละคน 5 บล็อก</span>
+<span class="k">tp</span> <span class="s">@p</span> <span class="v">^ ^ ^3</span>              <span class="c"># 3 บล็อกข้างหน้าผู้เล่น</span>
+<span class="k">tp</span> <span class="s">@e[type=zombie]</span> <span class="s">@p</span>      <span class="c"># เทเลพอร์ตซอมบี้ทั้งหมดไปหาผู้เล่น</span>
+<span class="k">tp</span> <span class="s">@p</span> <span class="v">~0 ~0 ~0</span> facing <span class="v">0 64 0</span>  <span class="c"># TP แล้วหันหน้าไปจุดนั้น</span></pre></div>
+    <div class="prose"><h2>🎒 ให้และเอาไอเทม</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">give · clear</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">give</span> <span class="s">@p</span> <span class="v">diamond</span> <span class="b">5</span>
+<span class="k">give</span> <span class="s">@a</span> <span class="v">iron_sword</span>
+<span class="k">give</span> <span class="s">@p</span> <span class="v">bow 1 0</span>
+<span class="k">clear</span> <span class="s">@a</span>                  <span class="c"># ลบไอเทมทั้งหมด</span>
+<span class="k">clear</span> <span class="s">@p</span> <span class="v">diamond</span>          <span class="c"># ลบเพชรทั้งหมด</span>
+<span class="k">clear</span> <span class="s">@a</span> <span class="v">iron_sword 0 1</span>   <span class="c"># ลบดาบ 1 เล่ม</span></pre></div>
+    <div class="prose"><h2>✨ เอฟเฟกต์</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">effect</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">effect</span> <span class="s">@p</span> <span class="v">speed</span> <span class="b">30 2 true</span>       <span class="c"># ความเร็ว II, 30 วิ, ซ่อนพาร์ติเคิล</span>
+<span class="k">effect</span> <span class="s">@a</span> <span class="v">night_vision 999 0 true</span>
+<span class="k">effect</span> <span class="s">@p</span> <span class="v">instant_health 1 2</span>     <span class="c"># เอฟเฟกต์ทันที ต้องใส่ duration=1</span>
+<span class="k">effect</span> <span class="s">@a</span> <span class="v">clear</span>                  <span class="c"># ลบเอฟเฟกต์ทั้งหมด</span></pre></div>
+    <div class="prose"><h2>⚙ โหมดเกมและกฎเกม</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">gamemode · gamerule · difficulty</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">gamemode survival</span> <span class="s">@a</span>
+<span class="k">gamemode creative</span> <span class="s">@p</span>
+<span class="k">gamemode adventure</span> <span class="s">@a</span>
+<span class="k">gamemode spectator</span> <span class="s">@p</span>
+<span class="k">difficulty hard</span>
+<span class="k">gamerule keepInventory</span> true     <span class="c"># ไม่หล่นไอเทมตอนตาย</span>
+<span class="k">gamerule doMobSpawning</span> false    <span class="c"># ปิดการเกิดมอนสเตอร์</span>
+<span class="k">gamerule doDaylightCycle</span> false  <span class="c"># หยุดวงจรกลางวัน/กลางคืน</span>
+<span class="k">gamerule naturalRegeneration</span> false
+<span class="k">gamerule showCoordinates</span> true   <span class="c"># แสดงพิกัด</span>
+<span class="k">gamerule mobGriefing</span> false      <span class="c"># มอนสเตอร์ทำลายบล็อกไม่ได้</span></pre></div>
+    <div class="prose"><h2>🔊 เสียงและพาร์ติเคิล</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">playsound · particle</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">playsound</span> <span class="v">random.levelup</span> <span class="s">@a</span>
+<span class="k">playsound</span> <span class="v">mob.wither.spawn</span> <span class="s">@a</span> <span class="b">~ ~ ~</span> <span class="p">1 1</span>
+<span class="k">particle</span> <span class="v">minecraft:heart_particle</span> <span class="b">~ ~2 ~</span>
+<span class="k">particle</span> <span class="v">minecraft:explosion_particle</span> <span class="b">~ ~1 ~</span></pre></div>
+  </div>
+</div>
 
-            const html = filtered.map((s, i) => {
-                const thumb = s.image && !s.image.includes('http') ? `https://scriptblox.com${s.image}` : (s.game.imageUrl || "https://via.placeholder.com/400x225");
-                const finalIdx = startIdx + i;
-                return `
-                <div class="reth-card p-6 card-pop" onclick="openModal(${finalIdx})" style="animation-delay: ${(i % 20) * 0.06}s">
-                    <div class="relative aspect-video rounded-2xl overflow-hidden mb-5 bg-zinc-900 border-2 border-[var(--border-color)]">
-                        ${s.verified ? `<div class="ver-badge">${verStar}</div>` : ""}
-                        <div class="key-badge ${s.key ? 'bg-key' : 'bg-keyless'}">${s.key ? 'Key' : 'Keyless'}</div>
-                        <div class="status-badge"><span class="dot"></span> Working</div>
-                        <img src="${thumb}" loading="lazy" class="w-full h-full object-cover">
-                    </div>
-                    <div class="btn-copy-white" onclick="event.stopPropagation(); quickCopy(${finalIdx})">Copy Script</div>
-                    <div class="stats-row">
-                        <span><i class="fa-solid fa-eye"></i> ${s.views.toLocaleString()}</span>
-                        <span><i class="fa-solid fa-thumbs-up"></i> ${s.likeCount || 0}</span>
-                        <span><i class="fa-solid fa-thumbs-down"></i> ${s.dislikeCount || 0}</span>
-                    </div>
-                    <h3 class="text-sm font-black uppercase truncate">${s.title}</h3>
-                    <p class="text-[9px] text-zinc-500 font-bold uppercase truncate mt-1">${s.game.name}</p>
-                </div>`;
-            }).join('');
+<!-- ══════ ตัวแปร ══════ -->
+<div id="page-variables" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>ตัวแปรและ Scoreboard</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://avatars.fastly.steamstatic.com/c5f47535f941cb91c903d85532666e73dee44597_full.jpg" onerror="this.outerHTML='<span style=font-size:48px>📊</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 3 · ตัวแปรและ SCOREBOARD</div>
+        <div class="lesson-title">Scoreboard — ตัวแปรสำหรับ Bedrock</div>
+        <div class="lesson-desc">Scoreboard คือสิ่งที่ใกล้เคียงตัวแปรมากที่สุดใน Bedrock เก็บตัวเลขต่อผู้เล่น เชี่ยวชาญสิ่งนี้ แล้วคุณสร้างอะไรก็ได้</div>
+      </div>
+    </div>
+    <div class="prose"><h2>📦 สร้าง Objective (ตัวแปร)</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">scoreboard objectives</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># สร้างตัวแปรแบบกำหนดเอง (dummy)</span>
+<span class="k">scoreboard objectives add</span> <span class="v">coins</span> <span class="p">dummy</span> <span class="y">"§6เหรียญ"</span>
 
-            if (append) grid.insertAdjacentHTML('beforeend', html);
-            else grid.innerHTML = html;
-        }
+<span class="c"># ติดตามคิลอัตโนมัติ</span>
+<span class="k">scoreboard objectives add</span> <span class="v">kills</span> <span class="p">playerKillCount</span> <span class="y">"§cคิล"</span>
 
-        // --- CORE FUNCTIONS (NO REMOVAL) ---
-        function filterRefresh() { document.getElementById('scriptGrid').innerHTML = ""; renderCards(allScripts, false, 0); }
-        function filterByCategory(cat, btn) {
-            if(btn) { document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); btn.classList.add('active'); }
-            document.getElementById('searchInput').value = cat; fetchScripts(cat, 1, false);
-        }
-        function setTheme(m) {
-            document.body.setAttribute('data-theme', m);
-            document.getElementById('dBtn').classList.toggle('active', m === 'dark');
-            document.getElementById('lBtn').classList.toggle('active', m === 'light');
-            localStorage.setItem('reth-theme', m);
-            if(shapes.length) shapes.forEach(s => s.material.color.set(m === 'light' ? 0x000000 : 0x4f6b8f));
-        }
-        function openModal(i) {
-            const s = allScripts[i];
-            document.getElementById('mTitle').innerText = s.title;
-            document.getElementById('mImg').src = s.image && !s.image.includes('http') ? `https://scriptblox.com${s.image}` : (s.game.imageUrl || "");
-            document.getElementById('mStatsRow').innerHTML = `
-                <span><i class="fa-solid fa-eye"></i> ${s.views.toLocaleString()}</span>
-                <span><i class="fa-solid fa-thumbs-up"></i> ${s.likeCount || 0}</span>
-                <span><i class="fa-solid fa-thumbs-down"></i> ${s.dislikeCount || 0}</span>
-                <span class="ml-auto">Game: ${s.game.name}</span>`;
-            document.getElementById('mCode').innerText = s.script || "-- No Code --";
-            document.getElementById('mLink').href = "https://scriptblox.com/script/" + s.slug;
-            const m = document.getElementById('modal'); m.classList.replace('hidden', 'flex'); setTimeout(() => m.classList.add('opacity-100'), 10);
-        }
-        function closeModal() { const m = document.getElementById('modal'); m.classList.remove('opacity-100'); setTimeout(() => m.classList.replace('flex', 'hidden'), 300); }
-        function openTrending() { const m = document.getElementById('trendingModal'); m.classList.replace('hidden', 'flex'); setTimeout(() => m.classList.add('opacity-100'), 10); }
-        function closeTrending() { const m = document.getElementById('trendingModal'); m.classList.remove('opacity-100'); setTimeout(() => m.classList.replace('flex', 'hidden'), 300); }
-        function quickCopy(i) { navigator.clipboard.writeText(allScripts[i].script); showToast(); }
-        function copyFromModal() { navigator.clipboard.writeText(document.getElementById('mCode').innerText); showToast(); }
-        function showToast() { const t = document.getElementById('toast'); t.style.display='block'; setTimeout(()=>t.style.display='none', 2000); }
-        function loadMore() { fetchScripts(currentQuery, currentPage + 1, true); }
-        function toggleFilter() { document.getElementById('filterMenu').classList.toggle('hidden'); }
+<span class="c"># แสดงที่ด้านข้างหน้าจอ</span>
+<span class="k">scoreboard objectives setdisplay</span> <span class="p">sidebar</span> <span class="v">kills</span>
 
-        window.onload = () => { init3D(); animate3D(); setTheme(localStorage.getItem('reth-theme') || 'dark'); fetchScripts(); };
-        let db; document.getElementById('searchInput').addEventListener('input', (e) => { clearTimeout(db); db = setTimeout(() => fetchScripts(e.target.value, 1, false), 500); });
-        window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
-    </script>
+<span class="c"># ลบออก</span>
+<span class="k">scoreboard objectives remove</span> <span class="v">coins</span></pre></div>
+    <div class="prose"><h2>✏ อ่านและเขียนค่า</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">scoreboard players</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># SET — กำหนดค่าแน่นอน</span>
+<span class="k">scoreboard players set</span> <span class="s">@a</span> <span class="v">coins</span> <span class="b">0</span>
+
+<span class="c"># ADD — เพิ่มค่า</span>
+<span class="k">scoreboard players add</span> <span class="s">@p</span> <span class="v">coins</span> <span class="b">10</span>
+
+<span class="c"># REMOVE — ลดค่า</span>
+<span class="k">scoreboard players remove</span> <span class="s">@p</span> <span class="v">coins</span> <span class="b">5</span>
+
+<span class="c"># TEST — ตรวจสอบช่วง (สำเร็จ/ล้มเหลว สำหรับ conditional chain)</span>
+<span class="k">scoreboard players test</span> <span class="s">@p</span> <span class="v">coins</span> <span class="b">10 *</span>    <span class="c"># อย่างน้อย 10</span>
+<span class="k">scoreboard players test</span> <span class="s">@p</span> <span class="v">coins</span> <span class="b">* 50</span>    <span class="c"># ไม่เกิน 50</span>
+
+<span class="c"># RANDOM — เฉพาะ Bedrock! ตั้งค่าสุ่ม</span>
+<span class="k">scoreboard players random</span> <span class="s">@p</span> <span class="v">loot</span> <span class="b">1 100</span></pre></div>
+    <div class="callout tip"><span class="callout-icon">💡</span><span><strong>scoreboard players random</strong> มีเฉพาะ Bedrock เท่านั้น! Java Edition ไม่มี ใช้สำหรับของรางวัล, เหตุการณ์สุ่ม และความหลากหลายของมินิเกม</span></div>
+    <div class="prose"><h2>🏷 Tag — ตัวแปรแบบ Boolean</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">tag</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">tag</span> <span class="s">@p</span> add <span class="v">isVIP</span>
+<span class="k">tag</span> <span class="s">@a</span> add <span class="v">playing</span>
+<span class="k">tag</span> <span class="s">@p</span> remove <span class="v">isVIP</span>
+<span class="k">give</span> <span class="s">@a[tag=isVIP]</span> <span class="v">diamond 5</span>
+<span class="k">gamemode adventure</span> <span class="s">@a[tag=!playing]</span></pre></div>
+    <div class="prose"><h2>📊 ประเภท Criteria</h2></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Criteria</th><th>ติดตามอะไร</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">dummy</td><td>ไม่มี — กำหนดเอง</td></tr>
+        <tr><td class="mono">playerKillCount</td><td>คิล PvP</td></tr>
+        <tr><td class="mono">totalKillCount</td><td>คิลทั้งหมด (มอนสเตอร์+ผู้เล่น)</td></tr>
+        <tr><td class="mono">deathCount</td><td>จำนวนที่ตาย</td></tr>
+        <tr><td class="mono">health</td><td>HP ปัจจุบัน (ค่า = HP×2)</td></tr>
+        <tr><td class="mono">level</td><td>เลเวล XP</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ══════ เงื่อนไข ══════ -->
+<div id="page-conditions" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>เงื่อนไขและลอจิก</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://avatars.fastly.steamstatic.com/c5f47535f941cb91c903d85532666e73dee44597_full.jpg" onerror="this.outerHTML='<span style=font-size:48px>🔀</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 4 · เงื่อนไขและลอจิก</div>
+        <div class="lesson-title">If / Unless — สร้างลอจิกเกม</div>
+        <div class="lesson-desc">รันคอมมานด์เมื่อเงื่อนไขที่กำหนดเป็นจริง นี่คือหัวใจของมินิเกมและระบบอัตโนมัติ</div>
+      </div>
+    </div>
+    <div class="prose"><h2>🔍 testfor และ testforblock</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">testfor · testforblock · testforblocks</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># testfor: สำเร็จถ้ามี entity นั้นอยู่</span>
+<span class="k">testfor</span> <span class="s">@a[tag=ready]</span>
+<span class="k">testfor</span> <span class="s">@e[type=wither,r=100]</span>
+<span class="k">testfor</span> <span class="s">@a[scores={kills=10..}]</span>
+
+<span class="c"># testforblock: สำเร็จถ้าบล็อกที่ตำแหน่งตรงกัน</span>
+<span class="k">testforblock</span> <span class="b">10 64 10</span> <span class="v">gold_block</span>
+<span class="k">testforblock</span> <span class="b">~ ~-1 ~</span> <span class="v">pressure_plate</span></pre></div>
+    <div class="prose"><h2>🔗 รูปแบบ Conditional Chain</h2><p>บล็อกที่ 1 ตรวจสอบเงื่อนไข บล็อกที่ 2 ตั้งเป็น <strong>Conditional</strong> จะรันก็ต่อเมื่อบล็อก 1 สำเร็จ</p></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">if-then ด้วย conditional chain</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># บล็อก 1 (Impulse/Repeat) — ตรวจสอบ</span>
+<span class="k">testfor</span> <span class="s">@a[scores={kills=10..}]</span>
+
+<span class="c"># บล็อก 2 (Chain, CONDITIONAL) — รันก็ต่อเมื่อบล็อก 1 สำเร็จ</span>
+<span class="k">title</span> <span class="s">@a</span> title §6§lเกมจบแล้ว!
+
+<span class="c"># บล็อก 3 (Chain, CONDITIONAL)</span>
+<span class="k">playsound</span> <span class="v">random.levelup</span> <span class="s">@a</span>
+
+<span class="c"># บล็อก 4 (Chain, UNCONDITIONAL) — รันเสมอ</span>
+<span class="k">scoreboard players set</span> <span class="s">@a</span> <span class="v">kills</span> <span class="b">0</span></pre></div>
+    <div class="prose"><h2>⚡ execute if / unless (Bedrock 1.19.80+)</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">execute if / unless</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">execute</span> if entity <span class="s">@a[tag=alive]</span> run <span class="k">say</span> เกมยังดำเนินอยู่!
+<span class="k">execute</span> unless entity <span class="s">@e[type=wither]</span> run <span class="k">say</span> ไม่มี Wither!
+<span class="k">execute</span> as <span class="s">@a</span> at <span class="s">@s</span> if block <span class="b">~ ~-1 ~</span> <span class="v">diamond_block</span> run <span class="k">give</span> <span class="s">@s</span> diamond
+<span class="k">execute</span> if score <span class="s">@p</span> <span class="v">kills</span> matches <span class="b">10..</span> run <span class="k">title</span> <span class="s">@a</span> title §6ผู้ชนะ!
+<span class="k">execute</span> if score <span class="s">@p</span> <span class="v">timer</span> matches <span class="b">..0</span> run <span class="k">say</span> หมดเวลาแล้ว!</pre></div>
+    <div class="prose"><h2>🕵 execute...detect (คลาสสิค Bedrock)</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">execute ... detect</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># รันถ้าผู้เล่นยืนบนบล็อกนั้น</span>
+<span class="k">execute</span> <span class="s">@a</span> <span class="b">~ ~ ~</span> detect <span class="b">~ ~-1 ~</span> <span class="v">gold_block 0</span> <span class="k">give</span> <span class="s">@p</span> gold_ingot 1
+<span class="k">execute</span> <span class="s">@a</span> <span class="b">~ ~ ~</span> detect <span class="b">~ ~ ~</span> <span class="v">water -1</span> <span class="k">effect</span> <span class="s">@s</span> regeneration 2 0</pre></div>
+    <div class="prose"><h2>📏 ช่วงคะแนน (Score Range)</h2></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>ช่วง</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">matches 5</td><td>เท่ากับ 5 พอดี</td></tr>
+        <tr><td class="mono">matches 1..10</td><td>ระหว่าง 1 ถึง 10</td></tr>
+        <tr><td class="mono">matches 5..</td><td>5 ขึ้นไป (เงื่อนไขชนะ)</td></tr>
+        <tr><td class="mono">matches ..5</td><td>5 หรือน้อยกว่า</td></tr>
+        <tr><td class="mono">matches ..0</td><td>0 หรือน้อยกว่า (หมดเวลา)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ══════ โลก ══════ -->
+<div id="page-world" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>โลกและสิ่งมีชีวิต</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://media.forgecdn.net/avatars/767/256/638102849234067121.png" onerror="this.outerHTML='<span style=font-size:48px>🌍</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 5 · โลกและสิ่งมีชีวิต</div>
+        <div class="lesson-title">ควบคุมโลกและจัดการสิ่งมีชีวิต</div>
+        <div class="lesson-desc">ควบคุมเวลา, สภาพอากาศ, ซัมมอนมอนสเตอร์ และจัดการ Entity</div>
+      </div>
+    </div>
+    <div class="prose"><h2>⏰ เวลาและสภาพอากาศ</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">time · weather</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">time set day</span>      <span class="c"># 0=รุ่งอรุณ 6000=เที่ยง 12000=พระอาทิตย์ตก 18000=เที่ยงคืน</span>
+<span class="k">time set night</span>
+<span class="k">time set</span> <span class="v">6000</span>
+<span class="k">time add</span> <span class="v">1000</span>
+<span class="k">weather clear</span> <span class="b">300</span>
+<span class="k">weather rain</span>
+<span class="k">weather thunder</span></pre></div>
+    <div class="prose"><h2>🧟 ซัมมอนและกำจัด</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">summon · kill · damage</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">summon</span> <span class="v">zombie</span> <span class="b">~ ~ ~</span>
+<span class="k">summon</span> <span class="v">creeper</span> <span class="b">100 64 200</span>
+<span class="k">summon</span> <span class="v">lightning_bolt</span> <span class="b">~ ~ ~</span>
+<span class="k">summon</span> <span class="v">tnt</span> <span class="b">~ ~1 ~</span>
+<span class="k">summon</span> <span class="v">skeleton</span> <span class="b">~ ~ ~</span> minecraft:default <span class="y">"§cบอส"</span>
+
+<span class="k">kill</span> <span class="s">@e[type=zombie]</span>
+<span class="k">kill</span> <span class="s">@e[type=!player]</span>       <span class="c"># กำจัดทุกอย่างยกเว้นผู้เล่น</span>
+<span class="k">kill</span> <span class="s">@e[type=item]</span>          <span class="c"># ลบไอเทมที่ตกพื้น</span>
+
+<span class="c"># damage (Bedrock 1.18.10+)</span>
+<span class="k">damage</span> <span class="s">@p</span> <span class="b">5</span> <span class="v">entity_attack</span>
+<span class="k">damage</span> <span class="s">@a</span> <span class="b">2</span> <span class="v">magic</span></pre></div>
+  </div>
+</div>
+
+<!-- ══════ บล็อก ══════ -->
+<div id="page-blocks" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>บล็อกและการโคลน</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://p.novaskin.me/2665083049.png?class=thumbnail" onerror="this.outerHTML='<span style=font-size:48px>🧱</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 6 · บล็อกและการโคลน</div>
+        <div class="lesson-title">fill, setblock, clone</div>
+        <div class="lesson-desc">สร้าง, ลบ และคัดลอกโลกของคุณด้วยโปรแกรม</div>
+      </div>
+    </div>
+    <div class="prose"><h2>🔲 setblock</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">setblock</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">setblock</span> <span class="b">~ ~ ~</span> <span class="v">stone</span>
+<span class="k">setblock</span> <span class="b">~ ~-1 ~</span> <span class="v">air</span> destroy   <span class="c"># ทำลาย (ไอเทมร่วง)</span>
+<span class="k">setblock</span> <span class="b">~ ~-1 ~</span> <span class="v">grass</span> replace</pre></div>
+    <div class="prose"><h2>🟩 fill</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">fill</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">fill</span> <span class="b">~-10 ~ ~-10</span> <span class="b">~10 ~5 ~10</span> <span class="v">air</span>           <span class="c"># เคลียร์พื้นที่</span>
+<span class="k">fill</span> <span class="b">0 64 0</span> <span class="b">100 64 100</span> <span class="v">grass</span>              <span class="c"># พื้นราบ</span>
+<span class="k">fill</span> <span class="b">~-5 ~ ~-5</span> <span class="b">~5 ~6 ~5</span> <span class="v">glass hollow</span>      <span class="c"># กล่องกลวง</span>
+<span class="k">fill</span> <span class="b">~-5 ~ ~-5</span> <span class="b">~5 ~6 ~5</span> <span class="v">stone outline</span>     <span class="c"># เฉพาะขอบ</span>
+<span class="k">fill</span> <span class="b">0 60 0</span> <span class="b">50 64 50</span> <span class="v">water replace air</span>    <span class="c"># แทนเฉพาะ air</span></pre></div>
+    <div class="callout warn"><span class="callout-icon">⚠️</span><span>Bedrock /fill จำกัด 32,768 บล็อกต่อคำสั่ง พื้นที่ใหญ่ให้แบ่งหลายคำสั่ง</span></div>
+    <div class="prose"><h2>📋 clone</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">clone</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">clone</span> <span class="b">0 64 0</span> <span class="b">20 80 20</span> <span class="b">100 64 100</span>            <span class="c"># คัดลอกพื้นที่</span>
+<span class="k">clone</span> <span class="b">0 64 0</span> <span class="b">20 80 20</span> <span class="b">100 64 100</span> replace move <span class="c"># ย้ายพื้นที่</span>
+<span class="k">clone</span> <span class="b">0 64 0</span> <span class="b">20 80 20</span> <span class="b">100 64 100</span> masked       <span class="c"># ข้าม air</span></pre></div>
+  </div>
+</div>
+
+<!-- ══════ EXECUTE ══════ -->
+<div id="page-execute" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>Execute และ Chain</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://avatars.fastly.steamstatic.com/c5f47535f941cb91c903d85532666e73dee44597_full.jpg" onerror="this.outerHTML='<span style=font-size:48px>⚡</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 7 · EXECUTE และ CHAIN</div>
+        <div class="lesson-title">คำสั่ง execute — พลังเต็มรูปแบบ</div>
+        <div class="lesson-desc">รันคำสั่งในฐานะ Entity อื่น, จากตำแหน่งอื่น, พร้อมเงื่อนไข — ทั้งหมดในคำสั่งเดียว</div>
+      </div>
+    </div>
+    <div class="prose"><h2>🔬 โครงสร้างคำสั่ง</h2></div>
+    <div class="syntax-box">
+      <div class="syntax-line">
+        <span class="syn-part syn-cmd">execute</span>
+        <span class="syn-part syn-sel">@a</span>
+        <span class="syn-part syn-arg">~ ~ ~</span>
+        <span class="syn-part syn-opt">detect ~ ~-1 ~ gold_block 0</span>
+        <span class="syn-part syn-val">give @s diamond 1</span>
+      </div>
+      <div class="syntax-legend">
+        <div class="leg-item"><div class="leg-dot syn-cmd" style="display:inline-block;width:12px;height:12px;background:#2d5016;border:1px solid #3a6620"></div> คำสั่ง</div>
+        <div class="leg-item"><div class="leg-dot" style="display:inline-block;width:12px;height:12px;background:#1a3a5c"></div> เป้าหมาย</div>
+        <div class="leg-item"><div class="leg-dot" style="display:inline-block;width:12px;height:12px;background:#3a2a00"></div> ตำแหน่ง</div>
+        <div class="leg-item"><div class="leg-dot" style="display:inline-block;width:12px;height:12px;background:#1a2a1a;border:1px dashed #444"></div> detect (ไม่บังคับ)</div>
+        <div class="leg-item"><div class="leg-dot" style="display:inline-block;width:12px;height:12px;background:#2a1a3a"></div> คำสั่งที่จะรัน</div>
+      </div>
+    </div>
+    <div class="prose"><h2>🗂 รูปแบบคลาสสิค Bedrock</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">execute (ใช้ได้ทุก Bedrock version)</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># รันในฐานะผู้เล่นแต่ละคนที่ตำแหน่งของเขา</span>
+<span class="k">execute</span> <span class="s">@a</span> <span class="b">~ ~ ~</span> run <span class="k">say</span> ฉันอยู่ที่นี่!
+
+<span class="c"># รันถ้ายืนบน diamond block</span>
+<span class="k">execute</span> <span class="s">@a</span> <span class="b">~ ~ ~</span> detect <span class="b">~ ~-1 ~</span> <span class="v">diamond_block 0</span> <span class="k">effect</span> <span class="s">@s</span> speed 2 1
+
+<span class="c"># เทเลพอร์ตผู้เล่นไปข้างหน้า</span>
+<span class="k">execute</span> <span class="s">@a</span> <span class="b">~ ~ ~</span> <span class="k">tp</span> <span class="s">@s</span> <span class="b">^ ^ ^5</span>
+
+<span class="c"># ซัมมอนสายฟ้าบนซอมบี้ทุกตัว</span>
+<span class="k">execute</span> <span class="s">@e[type=zombie]</span> <span class="b">~ ~ ~</span> <span class="k">summon lightning_bolt</span>
+
+<span class="c"># ฮีลผู้เล่นที่ยืนในน้ำ</span>
+<span class="k">execute</span> <span class="s">@a</span> <span class="b">~ ~ ~</span> detect <span class="b">~ ~ ~</span> <span class="v">water -1</span> <span class="k">effect</span> <span class="s">@s</span> regeneration 2 0</pre></div>
+    <div class="prose"><h2>✨ ไวยากรณ์ใหม่ (Bedrock 1.19.80+)</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">execute as at if unless</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">execute</span> as <span class="s">@a</span> at <span class="s">@s</span> run <span class="k">particle</span> <span class="v">minecraft:heart_particle</span> <span class="b">~ ~2 ~</span>
+<span class="k">execute</span> if entity <span class="s">@a[tag=winner]</span> run <span class="k">say</span> พบผู้ชนะแล้ว!
+<span class="k">execute</span> as <span class="s">@a</span> at <span class="s">@s</span> if block <span class="b">~ ~-1 ~</span> <span class="v">diamond_block</span> run <span class="k">give</span> <span class="s">@s</span> diamond
+<span class="k">execute</span> if score <span class="s">@p</span> <span class="v">kills</span> matches <span class="b">10..</span> run <span class="k">title</span> <span class="s">@a</span> title §6ผู้ชนะ!</pre></div>
+    <div class="prose"><h2>📦 hasitem — ตรวจสอบกระเป๋า</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">hasitem filter (เฉพาะ Bedrock)</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">execute</span> as <span class="s">@a[hasitem={item=diamond_sword}]</span> at <span class="s">@s</span> run <span class="k">effect</span> <span class="s">@s</span> strength 2 1
+<span class="k">title</span> <span class="s">@a[hasitem={item=diamond,quantity=5..}]</span> title §bรวยเพชร!
+<span class="k">give</span> <span class="s">@a[hasitem={item=wooden_sword,quantity=0}]</span> wooden_sword 1</pre></div>
+  </div>
+</div>
+
+<!-- ══════ ขั้นสูง ══════ -->
+<div id="page-advanced" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>ระบบขั้นสูง</span></div>
+    <div class="lesson-header">
+      <img class="lesson-header-icon" src="https://p.novaskin.me/2665083049.png?class=thumbnail" onerror="this.outerHTML='<span style=font-size:48px>🏆</span>'">
+      <div>
+        <div class="lesson-meta-tag">หมวด 8 · ระบบขั้นสูง</div>
+        <div class="lesson-title">ระบบเกมครบถ้วน</div>
+        <div class="lesson-desc">ตัวอย่างใช้งานจริง — ตัวนับเวลา, ลูปมินิเกม, ของรางวัลสุ่ม, สกิลพิเศษ</div>
+      </div>
+    </div>
+    <div class="prose"><h2>⏱ ระบบ 1: ตัวนับถอยหลัง</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">ตัวนับถอยหลัง 60 วินาที</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># ติดตั้ง (รันครั้งเดียว)</span>
+<span class="k">scoreboard objectives add</span> <span class="v">timer</span> dummy
+<span class="k">scoreboard players set</span> Timer <span class="v">timer</span> <span class="b">1200</span>   <span class="c"># 60วิ × 20ติ๊ก</span>
+
+<span class="c"># ติ๊ก (REPEAT, Always Active)</span>
+<span class="k">scoreboard players remove</span> Timer <span class="v">timer</span> <span class="b">1</span>
+
+<span class="c"># แสดงผล (Chain หลังติ๊ก)</span>
+<span class="k">title</span> <span class="s">@a</span> actionbar §e⏱ เวลาที่เหลือ
+
+<span class="c"># ตรวจสอบจบเวลา (Chain, Conditional)</span>
+<span class="k">testfor</span> <span class="s">@a[scores={timer=..0}]</span>
+<span class="c"># Chain ถัดไป (Conditional):</span>
+<span class="k">title</span> <span class="s">@a</span> title §c§lหมดเวลา!
+<span class="k">scoreboard players set</span> Timer <span class="v">timer</span> <span class="b">0</span></pre></div>
+    <div class="prose"><h2>⚔ ระบบ 2: นับคิล PvP</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">มินิเกม PvP พร้อมเงื่อนไขชนะ</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># ติดตั้ง</span>
+<span class="k">scoreboard objectives add</span> <span class="v">kills</span> playerKillCount <span class="y">"§cคิล"</span>
+<span class="k">scoreboard objectives setdisplay</span> sidebar <span class="v">kills</span>
+<span class="k">scoreboard players set</span> <span class="s">@a</span> <span class="v">kills</span> <span class="b">0</span>
+<span class="k">gamemode survival</span> <span class="s">@a</span>
+<span class="k">tp</span> <span class="s">@a</span> <span class="b">0 64 0</span>
+
+<span class="c"># REPEAT: ตรวจสอบผู้ชนะ</span>
+<span class="k">testfor</span> <span class="s">@a[scores={kills=10..}]</span>
+<span class="c"># Chain CONDITIONAL:</span>
+<span class="k">title</span> <span class="s">@a</span> title §6§lเกมจบแล้ว!
+<span class="k">playsound</span> random.levelup <span class="s">@a</span>
+<span class="k">scoreboard players set</span> <span class="s">@a</span> <span class="v">kills</span> <span class="b">0</span>
+<span class="k">tp</span> <span class="s">@a</span> <span class="b">0 64 200</span></pre></div>
+    <div class="prose"><h2>🎲 ระบบ 3: ของรางวัลสุ่ม (เฉพาะ Bedrock)</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">ระบบของรางวัลสุ่ม</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="k">scoreboard objectives add</span> <span class="v">loot</span> dummy
+<span class="c"># สุ่ม 1–5 เมื่อกดปุ่ม</span>
+<span class="k">scoreboard players random</span> <span class="s">@a[r=2]</span> <span class="v">loot</span> <span class="b">1 5</span>
+<span class="k">execute</span> as <span class="s">@a[scores={loot=1}]</span> run <span class="k">give</span> <span class="s">@s</span> apple <span class="b">2</span>
+<span class="k">execute</span> as <span class="s">@a[scores={loot=2}]</span> run <span class="k">give</span> <span class="s">@s</span> iron_ingot <span class="b">3</span>
+<span class="k">execute</span> as <span class="s">@a[scores={loot=3}]</span> run <span class="k">give</span> <span class="s">@s</span> gold_ingot <span class="b">2</span>
+<span class="k">execute</span> as <span class="s">@a[scores={loot=4}]</span> run <span class="k">give</span> <span class="s">@s</span> diamond <span class="b">1</span>
+<span class="k">execute</span> as <span class="s">@a[scores={loot=5}]</span> run <span class="k">give</span> <span class="s">@s</span> netherite_ingot <span class="b">1</span>
+<span class="k">execute</span> as <span class="s">@a[scores={loot=5}]</span> run <span class="k">title</span> <span class="s">@a</span> title §d§l★ แจ็คพ็อต! ★
+<span class="k">scoreboard players set</span> <span class="s">@a</span> <span class="v">loot</span> <span class="b">0</span></pre></div>
+    <div class="prose"><h2>⚡ ระบบ 4: สกิล Dash พร้อม Cooldown</h2></div>
+    <div class="codeblock"><div class="codeblock-header"><span class="codeblock-label">สกิล dash ใช้ carrot-on-a-stick</span><button class="copy-btn" onclick="copyCode(this)">คัดลอก</button></div>
+<pre><span class="c"># ติดตั้ง</span>
+<span class="k">scoreboard objectives add</span> <span class="v">dashCD</span> dummy
+<span class="k">scoreboard objectives add</span> <span class="v">useStick</span> minecraft.used:carrot_on_a_stick
+<span class="k">scoreboard players set</span> <span class="s">@a</span> <span class="v">dashCD</span> <span class="b">0</span>
+
+<span class="c"># REPEAT — ลด cooldown ทีละติ๊ก</span>
+<span class="k">execute</span> as <span class="s">@a[scores={dashCD=1..}]</span> run <span class="k">scoreboard players remove</span> <span class="s">@s</span> <span class="v">dashCD</span> <span class="b">1</span>
+
+<span class="c"># Dash เมื่อคลิก stick + ไม่มี cooldown</span>
+<span class="k">execute</span> as <span class="s">@a[scores={useStick=1..,dashCD=0}]</span> at <span class="s">@s</span> run <span class="k">tp</span> <span class="s">@s</span> <span class="b">^ ^ ^8</span>
+<span class="k">execute</span> as <span class="s">@a[scores={useStick=1..,dashCD=0}]</span> run <span class="k">scoreboard players set</span> <span class="s">@s</span> <span class="v">dashCD</span> <span class="b">60</span>
+<span class="k">execute</span> as <span class="s">@a[scores={useStick=1..,dashCD=0}]</span> at <span class="s">@s</span> run <span class="k">particle</span> <span class="v">minecraft:large_explosion</span> <span class="b">~ ~ ~</span>
+<span class="k">scoreboard players set</span> <span class="s">@a</span> <span class="v">useStick</span> <span class="b">0</span></pre></div>
+  </div>
+</div>
+
+<!-- ══════ ถาม AI ══════ -->
+<div id="page-ai" class="page">
+  <div class="content">
+    <div class="breadcrumb"><a onclick="showPage('home')">หน้าหลัก</a><span class="sep"> › </span><span>ถาม AI</span></div>
+    <div class="ai-wrapper">
+      <div class="ai-header">
+        <img class="ai-avatar" src="https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/Homepage_Download-Launcher_Creeper-Logo_500x500.png" onerror="this.outerHTML='<span style=font-size:40px>🤖</span>'">
+        <div>
+          <h3>BEDROCK COMMAND AI</h3>
+          <p>ถามคำถามใดก็ได้เกี่ยวกับคอมมานด์บล็อก Bedrock รับตัวอย่างที่ใช้ได้จริง, คำอธิบาย และระบบทีละขั้น</p>
+        </div>
+      </div>
+      <div class="quick-chips">
+        <button class="qchip" onclick="setQ('ทำตัวนับถอยหลังแสดงบน actionbar ใน Bedrock ยังไง?')">ตัวนับถอยหลัง</button>
+        <button class="qchip" onclick="setQ('ตรวจจับว่าผู้เล่นยืนอยู่บนบล็อกนั้น ๆ ใน Bedrock ยังไง?')">ตรวจจับบล็อก</button>
+        <button class="qchip" onclick="setQ('สร้างระบบของรางวัลสุ่มด้วย scoreboard players random ยังไง?')">ของรางวัลสุ่ม</button>
+        <button class="qchip" onclick="setQ('ทำนับคิล PvP แล้วจบเกมตอน 10 คิล ใน Bedrock ยังไง?')">นับคิล PvP</button>
+        <button class="qchip" onclick="setQ('Conditional กับ Unconditional chain block ต่างกันยังไง?')">Conditional Chain</button>
+        <button class="qchip" onclick="setQ('ทำความสามารถพิเศษพร้อม cooldown ให้ผู้เล่นใน Bedrock ยังไง?')">สกิลพิเศษ</button>
+      </div>
+      <div class="ai-input-area">
+        <textarea id="aiInput" placeholder="เช่น ทำระบบ team deathmatch ยังไง?&#10;ตรวจจับการคลิกขวาด้วยไอเทมใน Bedrock ยังไง?&#10;ช่วยสร้างเกม spleef ให้หน่อย..."></textarea>
+      </div>
+      <div class="ai-send-row">
+        <span>Ctrl+Enter เพื่อส่ง</span>
+        <button class="ai-send-btn" id="sendBtn" onclick="sendAI()">ส่ง ▶</button>
+      </div>
+      <div class="ai-response-box" id="aiResponseBox">
+        <div class="ai-response-inner" id="aiResponseInner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p><span>⬛ สารานุกรมคอมมานด์ Bedrock</span></p>
+  <p>สำหรับ Minecraft Bedrock Edition · ทดสอบทุกตัวอย่างบนเวอร์ชัน 1.19+</p>
+  <p style="margin-top:6px;color:#333">ไม่ได้เป็นส่วนหนึ่งของ Mojang Studios หรือ Microsoft</p>
+</footer>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.topbar-nav a').forEach(a => a.classList.remove('tactive'));
+  document.getElementById('page-' + id).classList.add('active');
+  const sn = document.getElementById('snav-' + id);
+  const tn = document.getElementById('tnav-' + id);
+  if (sn) sn.classList.add('active');
+  if (tn) tn.classList.add('tactive');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (window.innerWidth < 900) document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function doSearch(v) {
+  const map = {
+    execute:'execute', chain:'execute', condition:'conditions', เงื่อนไข:'conditions',
+    score:'variables', scoreboard:'variables', variable:'variables', ตัวแปร:'variables', คะแนน:'variables',
+    fill:'blocks', clone:'blocks', setblock:'blocks', บล็อก:'blocks',
+    give:'basic', effect:'basic', tp:'basic', teleport:'basic', title:'basic', gamerule:'basic',
+    ข้อความ:'basic', เอฟเฟกต์:'basic', เทเลพอร์ต:'basic',
+    summon:'world', kill:'world', time:'world', weather:'world', มอนสเตอร์:'world',
+    target:'theory', selector:'theory', block:'theory', ทฤษฎี:'theory',
+    timer:'advanced', minigame:'advanced', random:'advanced', dash:'advanced', ตัวนับ:'advanced', สุ่ม:'advanced',
+  };
+  const low = v.toLowerCase();
+  for (const [k,page] of Object.entries(map)) {
+    if (low.includes(k)) { showPage(page); return; }
+  }
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.codeblock').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ คัดลอกแล้ว';
+    setTimeout(() => btn.textContent = 'คัดลอก', 1600);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ คัดลอกแล้ว';
+    setTimeout(() => btn.textContent = 'คัดลอก', 1600);
+  });
+}
+
+function setQ(q) {
+  document.getElementById('aiInput').value = q;
+  document.getElementById('aiInput').focus();
+}
+
+async function sendAI() {
+  const q = document.getElementById('aiInput').value.trim();
+  if (!q) return;
+  const btn = document.getElementById('sendBtn');
+  const box = document.getElementById('aiResponseBox');
+  const inner = document.getElementById('aiResponseInner');
+
+  btn.textContent = 'กำลังคิด...';
+  btn.disabled = true;
+  box.classList.add('visible');
+  inner.innerHTML = '<span style="color:#666;font-family:Sarabun,sans-serif">กำลังสร้างคำตอบ...</span>';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-dangerous-direct-browser-calls': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'คุณคือผู้เชี่ยวชาญคอมมานด์บล็อก Minecraft Bedrock Edition ตอบเป็นภาษาไทยเสมอ ให้ตัวอย่างคอมมานด์ Bedrock ที่ใช้งานได้จริง ใช้ § สำหรับโค้ดสี บอกด้วยถ้าต้องใช้เวอร์ชันเฉพาะ จัดโค้ดในบล็อก triple backticks ตอบให้กระชับและปฏิบัติได้จริง',
+        messages: [{ role: 'user', content: q }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || 'API error ' + res.status);
+    }
+
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'ไม่ได้รับคำตอบ';
+
+    inner.innerHTML = text
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/```[a-z]*\n?([\s\S]*?)```/g,
+        '<div style="background:#111;border:2px solid #333;border-left:4px solid #62B330;padding:14px 16px;margin:10px 0;color:#88ff88;font-size:12px;line-height:1.8;overflow-x:auto;white-space:pre">$1</div>')
+      .replace(/`([^`]+)`/g,
+        '<span style="background:rgba(98,179,48,.15);color:#62B330;padding:1px 6px;border:1px solid rgba(98,179,48,.3)">$1</span>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#fff">$1</strong>')
+      .replace(/\n/g, '<br>');
+
+  } catch(e) {
+    inner.innerHTML = '<span style="color:#f87171">ข้อผิดพลาด: ' + (e.message || 'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่') + '</span>';
+  }
+
+  btn.textContent = 'ส่ง ▶';
+  btn.disabled = false;
+}
+
+document.getElementById('aiInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) sendAI();
+});
+</script>
 </body>
 </html>
